@@ -22,19 +22,21 @@ document.addEventListener("DOMContentLoaded", () => {
         const spotsLeft = details.max_participants - details.participants.length;
 
         const participantItems = details.participants.length
-          ? details.participants.map((participant) => `
-              <li>
-                <span>${participant}</span>
-                <button
-                  class="delete-participant"
-                  type="button"
-                  data-email="${participant}"
-                  data-activity="${name}"
-                  aria-label="Unregister ${participant}"
-                  title="Unregister participant"
-                >&times;</button>
-              </li>
-            `).join("")
+          ? details.participants.map((participant) => {
+              const item = document.createElement("li");
+              const participantLabel = document.createElement("span");
+              participantLabel.textContent = participant;
+              const deleteButton = document.createElement("button");
+              deleteButton.className = "delete-participant";
+              deleteButton.type = "button";
+              deleteButton.dataset.email = participant;
+              deleteButton.dataset.activity = name;
+              deleteButton.setAttribute("aria-label", `Unregister ${participant}`);
+              deleteButton.title = "Unregister participant";
+              deleteButton.textContent = "×";
+              item.append(participantLabel, deleteButton);
+              return item.outerHTML;
+            }).join("")
           : '<li class="no-participants">No participants yet</li>';
 
         activityCard.innerHTML = `
